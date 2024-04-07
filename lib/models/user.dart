@@ -13,13 +13,4 @@ class User {
     this.address,
     this.city,
   });
-
-  void update(User user) {
-    name = user.name;
-    email = user.email;
-    phone = user.phone;
-    image = user.image;
-    address = user.address;
-    city = user.city;
-  }
 }

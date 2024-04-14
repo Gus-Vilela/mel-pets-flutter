@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:projeto/models/missing_post.dart';
+import 'package:projeto/pages/add_missing_post_multi_page.dart';
+import 'package:projeto/pages/missing_details_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
+import 'package:provider/provider.dart';
 
-class MissingPage extends StatelessWidget {
+class MissingPage extends StatefulWidget {
   const MissingPage({super.key});
 
   @override
+  State<MissingPage> createState() => _MissingPageState();
+}
+
+class _MissingPageState extends State<MissingPage> {
+  @override
   Widget build(BuildContext context) {
-    MissingPostRepository missingPostRepository = MissingPostRepository();
+    onShowDetails(MissingPost missingPost) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MissingDetailsPage(missingPost: missingPost),
+        ),
+      );
+    }
+
+    onAddMissingPost() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const MultiStepForm()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],
@@ -15,35 +39,43 @@ class MissingPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         // list of missing posts
-        child: ListView.builder(
-          itemCount: missingPostRepository.missingPosts.length,
-          itemBuilder: (context, index) {
-            return Card.outlined(
-              shadowColor: Colors.red,
-              color: Colors.red[100],
-              child: ListTile(
+        child: Consumer<MissingPostRepository>(
+            builder: (context, missingPostRepository, child) {
+          return ListView.builder(
+            itemCount: missingPostRepository.missingPosts.length,
+            itemBuilder: (context, post) {
+              return Card.outlined(
+                shadowColor: Colors.red,
+                color: Colors.red[100],
+                child: ListTile(
                   title: Text(
-                    missingPostRepository.missingPosts[index].description,
+                    missingPostRepository.missingPosts[post].description,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(missingPostRepository
-                      .missingPosts[index].pet.name as String),
+                      .missingPosts[post].pet.name as String),
                   leading: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.asset(
-                        missingPostRepository.missingPosts[index].pet.image
+                        missingPostRepository.missingPosts[post].pet.image
                             as String,
                       )),
                   trailing: IconButton(
                     icon: const Icon(Icons.add_comment_rounded),
                     onPressed: () {},
-                  )),
-            );
-          },
-        ),
+                  ),
+                  onTap: () =>
+                      onShowDetails(missingPostRepository.missingPosts[post]),
+                ),
+              );
+            },
+          );
+        }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          onAddMissingPost();
+        },
         child: const Icon(Icons.add),
       ),
     );

@@ -51,3 +51,13 @@ class UserRepository extends ChangeNotifier {
     }
   }
 }
+
+class CurrentUser extends ChangeNotifier {
+  final User? _user;
+
+  CurrentUser(this._user);
+
+  User? get user => _user;
+
+  static User? currentUser = UserRepository().users[0];
+}

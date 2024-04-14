@@ -23,8 +23,8 @@ class Pet {
       {this.name,
       required this.type,
       this.breed,
-      this.dateOfBirth,
       this.color,
+      this.dateOfBirth,
       this.image,
       this.owner,
       required this.status});

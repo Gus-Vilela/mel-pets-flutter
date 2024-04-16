@@ -11,20 +11,20 @@ class UserRepository extends ChangeNotifier {
   UserRepository() {
     _users.addAll([
       User(
-        name: 'Tatiane',
-        email: 'tatiane@gmail.com',
-        phone: '999999999',
-        address: 'Rua 1',
-        city: 'Ponta Grossa',
-        image: 'assets/images/user1.png',
-      ),
+          id: '1000',
+          name: 'Gustavo',
+          email: 'gustavo@gmail.com',
+          phone: '999999999',
+          address: 'Rua 1',
+          city: 'Ponta Grossa',
+          image: 'images/shrek.jpg'),
       User(
+        id: '1001',
         name: 'João',
         email: 'jao@gmail.com',
         phone: '999999999',
         address: 'Rua 2',
         city: 'Ponta Grossa',
-        image: 'assets/images/user2.png',
       )
     ]);
   }
@@ -53,11 +53,5 @@ class UserRepository extends ChangeNotifier {
 }
 
 class CurrentUser extends ChangeNotifier {
-  final User? _user;
-
-  CurrentUser(this._user);
-
-  User? get user => _user;
-
   static User? currentUser = UserRepository().users[0];
 }

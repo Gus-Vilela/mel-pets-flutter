@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/pages/add_missing_post_multi_page.dart';
 import 'package:projeto/pages/missing_details_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
-import 'package:projeto/repositories/user_repository.dart';
 import 'package:provider/provider.dart';
 
 class MissingPage extends StatefulWidget {

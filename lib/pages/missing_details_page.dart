@@ -22,7 +22,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
   Widget build(BuildContext context) {
     var missingPost = Provider.of<MissingPostRepository>(
       context,
-      listen: false,
+      listen: true,
     ).missingPosts.firstWhere(
           (element) => element.id == widget.postId,
         );
@@ -58,7 +58,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          (missingPost.description as String),
+                          missingPost.description,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -74,7 +74,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          (missingPost.location as String),
+                          missingPost.location,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -92,7 +92,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                         child: Text(
                           //format date date fns
                           DateFormat('dd-MM-yyyy').format(
-                            missingPost.date as DateTime,
+                            missingPost.date,
                           ),
                           style: const TextStyle(
                             fontSize: 16,

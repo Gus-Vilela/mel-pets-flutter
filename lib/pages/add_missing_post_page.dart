@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/models/pet.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 List<String> getPetTypeStrings() {
   return PetType.values.map((type) => type.toString().split('.').last).toList();
@@ -20,7 +23,9 @@ List<String> _petTypes = getPetTypeStrings();
 
 class AddMissingPostPetPage extends StatefulWidget {
   final Function(Map<String, dynamic>) onNextStep;
-  const AddMissingPostPetPage({super.key, required this.onNextStep});
+  final MissingPost? initialData;
+  const AddMissingPostPetPage(
+      {super.key, required this.onNextStep, this.initialData});
 
   @override
   State<AddMissingPostPetPage> createState() => _AddMissingPostPageState();
@@ -32,13 +37,32 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
   final _value2 = TextEditingController();
   final _value3 = TextEditingController();
   final _value4 = TextEditingController();
-  Pet? _selectedPet;
-  final PetRepository petRepository = PetRepository();
+  List<Pet> pets = [];
+  Pet? selectedPet;
+
+  @override
+  void initState() {
+    super.initState();
+    pets = Provider.of<PetRepository>(context, listen: false)
+        .allPets
+        .where((pet) =>
+            pet.owner?.email == CurrentUser.currentUser!.email &&
+            pet.status != Status.lost)
+        .map((pet) => pet)
+        .toList();
+    if (widget.initialData != null) {
+      pets.add(widget.initialData!.pet);
+      selectedPet = widget.initialData!.pet;
+    }
+  }
 
   onSubmit() {
-    if (_selectedPet != null) {
+    if (selectedPet != null) {
+      selectedPet?.status = Status.lost;
+      Provider.of<PetRepository>(context, listen: false)
+          .updatePet(selectedPet!);
       return widget.onNextStep({
-        'pet': _selectedPet,
+        'pet': selectedPet,
         'isNewPet': false,
       });
     }
@@ -47,6 +71,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
       Map<String, dynamic> data = {
         'pet': // pet
             Pet(
+          id: Uuid().v4(),
           name: _value1.text,
           type: stringToPetType(_value2.text),
           breed: _value3.text,
@@ -69,62 +94,69 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Padding(
-                padding: const EdgeInsets.only(bottom: 24.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Seus pets',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+            if (pets.isNotEmpty)
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Seus pets',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    DropdownButtonFormField<Pet>(
-                      padding: // padding top
-                          const EdgeInsets.only(top: 22),
-                      value: _selectedPet,
-                      items: [
-                        DropdownMenuItem(
-                            value: null,
-                            child: Text('Selecione um do seus pets',
-                                style: TextStyle(
-                                    color: Colors.red[400],
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal))),
-                        ...petRepository.allPets
-                            .where((pet) =>
-                                pet.owner?.email ==
-                                CurrentUser.currentUser!.email)
-                            .map((pet) => DropdownMenuItem(
-                                  value: pet,
-                                  child: Text(pet.name as String),
-                                ))
-                      ],
-                      onChanged: (Pet? newValue) {
-                        setState(() {
-                          _selectedPet = newValue;
-                        });
-                      },
-                      hint: Text('Selecione um do seus pets',
-                          style: TextStyle(
-                              color: Colors.red[400],
+                      DropdownButtonFormField<Pet>(
+                        padding: // padding top
+                            const EdgeInsets.only(top: 22),
+                        value: selectedPet,
+                        onChanged: (Pet? newValue) {
+                          setState(() {
+                            selectedPet = newValue;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelStyle: const TextStyle(
+                              color: Colors.black87,
                               fontSize: 18,
-                              fontWeight: FontWeight.normal)),
-                      decoration: InputDecoration(
-                        labelStyle: const TextStyle(
-                            color: Colors.black87,
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal),
-                        errorStyle: const TextStyle(color: Colors.red),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red[400]!)),
+                              fontWeight: FontWeight.normal),
+                          errorStyle: const TextStyle(color: Colors.red),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red[400]!)),
+                        ),
+                        items: // list of pets
+                            <DropdownMenuItem<Pet>>[
+                          DropdownMenuItem<Pet>(
+                            value: null,
+                            child: Text(
+                              selectedPet == null
+                                  ? 'Selecione um dos seus pets'
+                                  : 'Adicione um novo pet',
+                              style: TextStyle(
+                                  color: Colors.red[400],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                          ...pets.map((pet) {
+                            return DropdownMenuItem<Pet>(
+                              value: pet,
+                              child: DefaultTextStyle(
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                child: Text(pet.name as String),
+                              ),
+                            );
+                          }),
+                        ],
                       ),
-                    ),
-                  ],
-                )),
-            if (_selectedPet == null)
+                    ],
+                  )),
+            if (selectedPet == null)
               Form(
                 key: _formKey,
                 child: Column(

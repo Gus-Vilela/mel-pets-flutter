@@ -1,4 +1,5 @@
 class User {
+  String id;
   String name;
   String email;
   String? phone;
@@ -6,6 +7,7 @@ class User {
   String? address;
   String? city;
   User({
+    required this.id,
     required this.name,
     required this.email,
     this.phone,

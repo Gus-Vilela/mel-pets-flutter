@@ -13,6 +13,7 @@ class PetRepository extends ChangeNotifier {
   PetRepository() {
     pets.addAll([
       Pet(
+        id: '1001',
         name: 'Rex',
         type: PetType.dog,
         breed: 'Golden Retriever',
@@ -23,6 +24,7 @@ class PetRepository extends ChangeNotifier {
         owner: userReposistory.users[0],
       ),
       Pet(
+        id: '1002',
         name: 'Tina',
         type: PetType.cat,
         breed: 'Siamese',
@@ -33,6 +35,7 @@ class PetRepository extends ChangeNotifier {
         owner: userReposistory.users[1],
       ),
       Pet(
+        id: '1003',
         name: 'DefftonesSwabbers',
         type: PetType.dog,
         breed: 'Pitbull',
@@ -54,15 +57,19 @@ class PetRepository extends ChangeNotifier {
   }
 
   updatePet(Pet pet) {
-    var index = pets.indexWhere((p) => p.name == pet.name);
-    if (index != -1) {
-      pets[index] = pet;
-      notifyListeners();
-    }
+    var index = pets.indexWhere((p) => p.id == pet.id);
+    pets[index] = pet;
+    notifyListeners();
   }
 
   deletePet(Pet pet) {
     pets.removeWhere((p) => p.name == pet.name);
+    notifyListeners();
+  }
+
+  petFound(Pet pet) {
+    var index = pets.indexWhere((p) => p.id == pet.id);
+    pets[index].status = Status.found;
     notifyListeners();
   }
 }

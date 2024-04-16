@@ -1,16 +1,23 @@
-# projeto
+## Projeto - Entrega 1
 
-A new Flutter project.
+## Integrantes
+- Gustavo Vilela
+- Tatiane Joventino
 
-## Getting Started
+## Tema
+- Vi um pet : Anúncio e reporte de animais de estimação perdidos;
 
-This project is a starting point for a Flutter application.
+## Funcionalidades faltantes
+- Login;
+- Cadastro de usuário;
+- Edição de pet;
+- Configurações;
 
-A few resources to get you started if this is your first Flutter project:
+## Instalação e instruções de uso
+- Flutter;
+- Utilizamos o Visual Studio Code com extensões Flutter e Dart para desenvolvimento, e testes via navegador e dispositivo móvel;
+- Pode ser executado em navegador, celular ou emulador;
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Atividades gerais dos integrantes
+- Gustavo (desenvolvimento de interfaces e navegação, padronização de arquivos de desenvolvimento, imagens, rotina de cadastro de pets, rotina de cadastro de anúncio de pet desaparecido, perfil de usuário, desenvolvimento das rotinas de CRUD, restrição de exclusão para o autor do registro apenas, etc.)
+- Tatiane (desenvolvimento de interfaces e navegação, rotina de cadastro de avistamento, filtro de avistamento, detalhamento do avistamento, desenvolvimento das rotinas de CRD, restrição de exclusão para o autor do registro apenas, etc.).

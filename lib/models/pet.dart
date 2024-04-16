@@ -1,6 +1,16 @@
 import 'package:projeto/models/user.dart';
 
-enum PetType { dog, cat, bird, fish, rabbit, hamster, turtle, guineaPig, other }
+enum PetType {
+  cachorro,
+  gato,
+  passaro,
+  peixe,
+  coelho,
+  hamster,
+  tartaruga,
+  porquinhoDaIndia,
+  outros
+}
 
 enum Status { lost, found }
 

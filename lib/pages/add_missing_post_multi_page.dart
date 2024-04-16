@@ -58,7 +58,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
           description: _formData['description'] as String,
           date: DateTime.parse(_formData['date'] as String),
           pet: _formData['pet'] as Pet,
-          user: CurrentUser.currentUser as User,
+          user: CurrentUser.currentUser,
         ),
       );
       Navigator.pop(context);
@@ -72,7 +72,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
         description: _formData['description'] as String,
         date: DateTime.parse(_formData['date'] as String),
         pet: _formData['pet'] as Pet,
-        user: CurrentUser.currentUser as User,
+        user: CurrentUser.currentUser,
       ),
     );
     Navigator.pop(context);

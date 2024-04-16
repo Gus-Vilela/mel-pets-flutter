@@ -19,7 +19,7 @@ class MissingPostRepository extends ChangeNotifier {
     missingPosts.addAll([
       MissingPost(
         id: '1000',
-        location: 'Rua 1',
+        location: 'Proximo ao centro',
         description: 'Cachorro perdido',
         date: DateTime(2024, 1, 12),
         pet: petRepository.pets[0],
@@ -27,7 +27,7 @@ class MissingPostRepository extends ChangeNotifier {
       ),
       MissingPost(
         id: '1001',
-        location: 'Rua 2',
+        location: 'Proximo ao Shopping',
         description: 'Gato perdido',
         date: DateTime(2023, 10, 23),
         pet: petRepository.pets[1],

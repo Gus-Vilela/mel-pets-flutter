@@ -125,7 +125,7 @@ class _AddMissingPostDetailsPageState extends State<AddMissingPostDetailsPage> {
                     await _selectDate();
                   },
                   decoration: InputDecoration(
-                    labelText: 'Select a Date',
+                    labelText: 'Selecione uma data',
                     labelStyle:
                         const TextStyle(color: Colors.black87, fontSize: 18),
                     errorStyle: const TextStyle(color: Colors.red),
@@ -142,13 +142,13 @@ class _AddMissingPostDetailsPageState extends State<AddMissingPostDetailsPage> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please select a date';
+                      return 'Por favor, insira uma data';
                     }
                     // validate date
                     if (DateFormat('yyyy-MM-dd')
                         .parse(value)
                         .isAfter(DateTime.now())) {
-                      return 'Please select a valid date';
+                      return 'Data inválida';
                     }
                     return null;
                   },

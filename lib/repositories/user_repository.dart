@@ -25,7 +25,7 @@ class UserRepository extends ChangeNotifier {
         phone: '999999999',
         address: 'Rua 2',
         city: 'Ponta Grossa',
-      )
+      ),
     ]);
   }
 
@@ -53,5 +53,5 @@ class UserRepository extends ChangeNotifier {
 }
 
 class CurrentUser extends ChangeNotifier {
-  static User? currentUser = UserRepository().users[0];
+  static User currentUser = UserRepository().users[0];
 }

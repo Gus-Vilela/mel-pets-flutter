@@ -56,24 +56,20 @@ class _MissingPageState extends State<MissingPage> {
                   subtitle: Text(missingPostRepository
                       .missingPosts[post].pet.name as String),
                   leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(15),
                     child: missingPostRepository.missingPosts[post].pet.image !=
                             null
                         ? Image.asset(
                             missingPostRepository.missingPosts[post].pet.image
                                 as String,
-                            width: 60,
-                            height: 60,
+                            width: 65,
+                            height: 65,
                           )
                         : const SizedBox(
-                            width: 60, // increase this value
-                            height: 60, // increase this value
-                            child: Icon(Icons.pets, size: 60),
+                            width: 65, // increase this value
+                            height: 65, // increase this value
+                            child: Icon(Icons.pets, size: 45),
                           ),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add_comment_rounded),
-                    onPressed: () {},
                   ),
                   onTap: () => onShowDetails(
                       missingPostRepository.missingPosts[post].id),

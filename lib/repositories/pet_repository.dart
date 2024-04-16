@@ -15,19 +15,19 @@ class PetRepository extends ChangeNotifier {
       Pet(
         id: '1001',
         name: 'Rex',
-        type: PetType.dog,
+        type: PetType.cachorro,
         breed: 'Golden Retriever',
         dateOfBirth: DateTime(2018, 5, 20),
-        color: 'Golden',
-        image: 'images/pets/golden.png',
+        color: 'Dourada',
+        image: 'images/pets/Golden.jpg',
         status: Status.lost,
         owner: userReposistory.users[0],
       ),
       Pet(
         id: '1002',
         name: 'Tina',
-        type: PetType.cat,
-        breed: 'Siamese',
+        type: PetType.gato,
+        breed: 'Siamesa',
         dateOfBirth: DateTime(2019, 2, 10),
         color: 'White',
         image: 'images/pets/catinho.jpg',
@@ -37,11 +37,10 @@ class PetRepository extends ChangeNotifier {
       Pet(
         id: '1003',
         name: 'DefftonesSwabbers',
-        type: PetType.dog,
+        type: PetType.cachorro,
         breed: 'Pitbull',
         dateOfBirth: DateTime(2017, 10, 10),
         color: 'Black',
-        image: 'assets/images/dog2.png',
         status: Status.found,
       )
     ]);
@@ -52,8 +51,8 @@ class PetRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Pet getPetByName(String name) {
-    return pets.firstWhere((pet) => pet.name == name);
+  Pet getPetById(String id) {
+    return pets.firstWhere((p) => p.id == id);
   }
 
   updatePet(Pet pet) {

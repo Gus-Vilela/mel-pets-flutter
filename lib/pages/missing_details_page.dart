@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projeto/models/pet.dart';
 import 'package:projeto/pages/add_missing_post_multi_page.dart';
+import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
@@ -28,56 +31,274 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
         backgroundColor: Colors.red[100],
         title: Text(missingPost.description),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: missingPost.pet.image != null
-                      ? Image.asset(
-                          missingPost.pet.image as String,
-                          width: 100,
-                          height: 100,
-                        )
-                      : const SizedBox(
-                          width: 100, // increase this value
-                          height: 100, // increase this value
-                          child: Icon(Icons.pets, size: 100),
-                        ),
+      body: SingleChildScrollView(
+        reverse: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.red[300] as Color,
+                  width: 2,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      Text(
-                        missingPost.pet.name as String,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+                      const Icon(
+                        Icons.description,
                       ),
-                      Text(
-                        missingPost.pet.breed as String,
-                        style: const TextStyle(
-                          fontSize: 16,
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          (missingPost.description as String),
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.place,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          (missingPost.location as String),
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_month,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          //format date date fns
+                          DateFormat('dd-MM-yyyy').format(
+                            missingPost.date as DateTime,
+                          ),
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]),
+            Container(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (missingPost.pet.image != null)
+                      Container(
+                        width: 125.0,
+                        height: 125.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              missingPost.pet.image as String,
+                            ),
+                          ),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(missingPost.pet.name as String, // user name
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.red[300] as Color,
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.pets,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          petTypeToString(missingPost.pet.type),
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // user phone
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.category,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.pet.breed as String,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.palette,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.pet.color as String,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.red[300] as Color,
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.person,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.pet.owner == null
+                              ? 'Desconhecido'
+                              : missingPost.pet.owner!.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.email),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.user.email,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // user phone
+                  Row(
+                    children: [
+                      const Icon(Icons.phone),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.user.phone as String,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.user.address as String,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // user city
+                  Row(
+                    children: [
+                      const Icon(Icons.location_city),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          missingPost.user.city as String,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: (missingPost.user.id == CurrentUser.currentUser?.id)
+      floatingActionButton: (missingPost.user.id == missingPost.user.id)
           ? Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

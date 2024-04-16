@@ -28,8 +28,8 @@ class _SightedPageState extends State<SightedPage> {
     _searchController.addListener(_searchSightings);
     super.initState();
   }
-  
-   _searchSightings() {
+
+  _searchSightings() {
     final String searchText = _searchController.text.toLowerCase();
     setState(() {
       _filteredSightings = Provider.of<SightedRepository>(
@@ -42,7 +42,8 @@ class _SightedPageState extends State<SightedPage> {
           case 'Raça':
             return sighting.breed?.toLowerCase().contains(searchText) ?? false;
           case 'Descrição':
-            return sighting.description?.toLowerCase().contains(searchText) ?? false;
+            return sighting.description?.toLowerCase().contains(searchText) ??
+                false;
           case 'Endereço':
             return sighting.address.toLowerCase().contains(searchText);
           case 'Cidade':
@@ -51,7 +52,6 @@ class _SightedPageState extends State<SightedPage> {
             return false;
         }
       }).toList();
-      
     });
   }
 
@@ -76,7 +76,6 @@ class _SightedPageState extends State<SightedPage> {
       appBar: AppBar(
         backgroundColor: Colors.red[100],
         title: const Text('Mel Pets'),
-        
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -112,7 +111,8 @@ class _SightedPageState extends State<SightedPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SightingDetailsPage(sighting: sighting, onSearch: _searchSightings),
+                          builder: (context) => SightingDetailsPage(
+                              sighting: sighting, onSearch: _searchSightings),
                         ),
                       );
                     },
@@ -190,7 +190,7 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
   @override
   void initState() {
     super.initState();
-    _type = PetType.dog;
+    _type = PetType.cachorro;
   }
 
   @override
@@ -210,19 +210,19 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
               onChanged: (value) => setState(() => _type = value!),
               items: const [
                 DropdownMenuItem<PetType>(
-                  value: PetType.dog,
+                  value: PetType.cachorro,
                   child: Text('Cachorro'),
                 ),
                 DropdownMenuItem<PetType>(
-                  value: PetType.cat,
+                  value: PetType.gato,
                   child: Text('Gato'),
                 ),
                 DropdownMenuItem<PetType>(
-                  value: PetType.bird,
+                  value: PetType.passaro,
                   child: Text('Pássaro'),
                 ),
                 DropdownMenuItem<PetType>(
-                  value: PetType.other,
+                  value: PetType.outros,
                   child: Text('Outro'),
                 ),
               ],
@@ -251,15 +251,14 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
         ElevatedButton(
           onPressed: () {
             Sighted newSighting = Sighted(
-              id: const Uuid().v4(),
-              color: _color,
-              type: _type,
-              breed: _breed,
-              description: _description,
-              address: _address,
-              city: _city,
-              user: CurrentUser.currentUser
-            );
+                id: const Uuid().v4(),
+                color: _color,
+                type: _type,
+                breed: _breed,
+                description: _description,
+                address: _address,
+                city: _city,
+                user: CurrentUser.currentUser);
             widget.onSightingAdded(newSighting);
             Navigator.pop(context);
           },

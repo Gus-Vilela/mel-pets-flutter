@@ -53,5 +53,5 @@ class UserRepository extends ChangeNotifier {
 }
 
 class CurrentUser extends ChangeNotifier {
-  static User? currentUser = UserRepository().users[0];
+  static User currentUser = UserRepository().users[0];
 }

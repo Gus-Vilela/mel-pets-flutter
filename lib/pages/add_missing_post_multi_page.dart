@@ -116,32 +116,5 @@ class _MultiStepFormState extends State<MultiStepForm> {
     return const Center(
       child: Text('Pet not selected'),
     );
-    //   return Center(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         const Text('Pet selected:'),
-    //         ((_formData['pet'] as Pet).image != null)
-    //             ? ClipRRect(
-    //                 borderRadius: BorderRadius.circular(30),
-    //                 child: Image.asset(
-    //                   (_formData['pet'] as Pet).image as String,
-    //                   width: 100,
-    //                   height: 100,
-    //                 ),
-    //               )
-    //             : const Icon(Icons.pets),
-    //         Text((_formData['pet'] as Pet).name as String),
-    //         Text(
-    //           petTypeToString((_formData['pet'] as Pet).type),
-    //         ),
-    //         AddMissingPostDetailsPage(),
-    //       ],
-    //     ),
-    //   );
-    // }
-    // return const Center(
-    //   child: Text('Pet not selected'),
-    // );
   }
 }

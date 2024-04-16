@@ -51,17 +51,17 @@ class _HomePageState extends State<HomePage> {
               label: 'Avistados',
             ),
             BottomNavigationBarItem(
-              icon: CurrentUser.currentUser?.image != null
+              icon: CurrentUser.currentUser.image != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.asset(
-                        CurrentUser.currentUser?.image as String,
+                        CurrentUser.currentUser.image as String,
                         width: 26,
                         height: 26,
                       ))
                   : const SizedBox(
-                      width: 26, // increase this value
-                      height: 26, // increase this value
+                      width: 26, 
+                      height: 26, 
                       child: Icon(Icons.person, size: 25),
                     ),
               label: 'Perfil',

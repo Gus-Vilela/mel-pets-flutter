@@ -22,23 +22,23 @@ class _UserInfoPageState extends State<UserInfoPage> {
           Container(
             padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
             child: Center(
-              // Add this
+             
               child: Column(
-                // center user image and name
+               
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // user image
-                  if (CurrentUser.currentUser?.image != null)
+                 
+                  if (CurrentUser.currentUser.image != null)
                     CircleAvatar(
                       radius: 50,
                       backgroundImage: AssetImage(
-                        CurrentUser.currentUser?.image as String,
+                        CurrentUser.currentUser.image as String,
                       ),
                     ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                        CurrentUser.currentUser?.name as String, // user name
+                        CurrentUser.currentUser.name, 
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -48,7 +48,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
               ),
             ),
           ),
-          // container with user contact info
+         
           Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -63,14 +63,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ),
             child: Column(
               children: [
-                // user email
+               
                 Row(
                   children: [
                     const Icon(Icons.email),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        CurrentUser.currentUser?.email as String,
+                        CurrentUser.currentUser.email,
                         style: const TextStyle(
                           fontSize: 16,
                         ),
@@ -78,14 +78,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
                     ),
                   ],
                 ),
-                // user phone
+                
                 Row(
                   children: [
                     const Icon(Icons.phone),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        CurrentUser.currentUser?.phone as String,
+                        CurrentUser.currentUser.phone as String,
                         style: const TextStyle(
                           fontSize: 16,
                         ),
@@ -96,7 +96,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
               ],
             ),
           ),
-          //user address and city
+         
           Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -111,14 +111,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ),
             child: Column(
               children: [
-                // user address
+                
                 Row(
                   children: [
                     const Icon(Icons.location_on),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        CurrentUser.currentUser?.address as String,
+                        CurrentUser.currentUser.address as String,
                         style: const TextStyle(
                           fontSize: 16,
                         ),
@@ -126,14 +126,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
                     ),
                   ],
                 ),
-                // user city
+               
                 Row(
                   children: [
                     const Icon(Icons.location_city),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        CurrentUser.currentUser?.city as String,
+                        CurrentUser.currentUser.city as String,
                         style: const TextStyle(
                           fontSize: 16,
                         ),

@@ -46,7 +46,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
     pets = Provider.of<PetRepository>(context, listen: false)
         .allPets
         .where((pet) =>
-            pet.owner?.email == CurrentUser.currentUser!.email &&
+            pet.owner?.email == CurrentUser.currentUser.email &&
             pet.status != Status.lost)
         .map((pet) => pet)
         .toList();
@@ -71,7 +71,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
       Map<String, dynamic> data = {
         'pet': // pet
             Pet(
-          id: Uuid().v4(),
+          id: const Uuid().v4(),
           name: _value1.text,
           type: stringToPetType(_value2.text),
           breed: _value3.text,
@@ -283,29 +283,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
                   ],
                 ),
               ),
-            // Container(
-            //   alignment: Alignment.center,
-            //   padding: const EdgeInsets.only(top: 24.0),
-            //   child: ElevatedButton(
-            //     style: ButtonStyle(
-            //       backgroundColor: MaterialStateProperty.all(Colors.red[100]),
-            //     ),
-            //     onPressed: () {
-            //       onSubmit();
-            //     },
-            //     child: const Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Icon(Icons.add, color: Colors.black87),
-            //         Padding(
-            //             padding: EdgeInsets.all(8.0),
-            //             child: Text('Adicionar postagem',
-            //                 style: TextStyle(
-            //                     color: Colors.black87, fontSize: 18))),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            
           ],
         ),
       ),

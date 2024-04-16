@@ -77,7 +77,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
           ),
         ]),
       ),
-      floatingActionButton: (missingPost.user.id == CurrentUser.currentUser?.id)
+      floatingActionButton: (missingPost.user.id == CurrentUser.currentUser.id)
           ? Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

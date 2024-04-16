@@ -10,18 +10,18 @@ class PetInfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.zero, // Remove o preenchimento interno
-      backgroundColor: Colors.transparent, // Define a cor de fundo transparente para o AlertDialog
+      contentPadding: EdgeInsets.zero, 
+      backgroundColor: Colors.transparent, 
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white, // Fundo branco
+              color: Colors.white, 
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(
-                color: Colors.pink, // Cor da borda cor de rosa
-                width: 2.0, // Largura da borda
+                color: Colors.pink, 
+                width: 2.0, 
               ),
             ),
             child: Padding(

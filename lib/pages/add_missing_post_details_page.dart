@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/models/pet.dart';
 
 class AddMissingPostDetailsPage extends StatefulWidget {
   final Function(Map<String, dynamic>) onNextStep;
   final Pet pet;
+  final MissingPost? initialData;
   const AddMissingPostDetailsPage(
-      {super.key, required this.onNextStep, required this.pet});
+      {super.key,
+      required this.onNextStep,
+      required this.pet,
+      this.initialData});
 
   @override
   State<AddMissingPostDetailsPage> createState() =>
@@ -18,6 +23,17 @@ class _AddMissingPostDetailsPageState extends State<AddMissingPostDetailsPage> {
   final _value1 = TextEditingController();
   final _value2 = TextEditingController();
   final _dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialData != null) {
+      _value1.text = widget.initialData!.description;
+      _value2.text = widget.initialData!.location;
+      _dateController.text =
+          DateFormat('yyyy-MM-dd').format(widget.initialData!.date);
+    }
+  }
 
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(

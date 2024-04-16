@@ -3,6 +3,7 @@ import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/pages/add_missing_post_multi_page.dart';
 import 'package:projeto/pages/missing_details_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
+import 'package:projeto/repositories/user_repository.dart';
 import 'package:provider/provider.dart';
 
 class MissingPage extends StatefulWidget {
@@ -15,11 +16,11 @@ class MissingPage extends StatefulWidget {
 class _MissingPageState extends State<MissingPage> {
   @override
   Widget build(BuildContext context) {
-    onShowDetails(MissingPost missingPost) {
+    onShowDetails(String postId) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => MissingDetailsPage(missingPost: missingPost),
+          builder: (_) => MissingDetailsPage(postId: postId),
         ),
       );
     }
@@ -55,17 +56,27 @@ class _MissingPageState extends State<MissingPage> {
                   subtitle: Text(missingPostRepository
                       .missingPosts[post].pet.name as String),
                   leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Image.asset(
-                        missingPostRepository.missingPosts[post].pet.image
-                            as String,
-                      )),
+                    borderRadius: BorderRadius.circular(30),
+                    child: missingPostRepository.missingPosts[post].pet.image !=
+                            null
+                        ? Image.asset(
+                            missingPostRepository.missingPosts[post].pet.image
+                                as String,
+                            width: 60,
+                            height: 60,
+                          )
+                        : const SizedBox(
+                            width: 60, // increase this value
+                            height: 60, // increase this value
+                            child: Icon(Icons.pets, size: 60),
+                          ),
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.add_comment_rounded),
                     onPressed: () {},
                   ),
-                  onTap: () =>
-                      onShowDetails(missingPostRepository.missingPosts[post]),
+                  onTap: () => onShowDetails(
+                      missingPostRepository.missingPosts[post].id),
                 ),
               );
             },

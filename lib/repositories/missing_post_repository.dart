@@ -18,6 +18,7 @@ class MissingPostRepository extends ChangeNotifier {
   MissingPostRepository() {
     missingPosts.addAll([
       MissingPost(
+        id: '1000',
         location: 'Rua 1',
         description: 'Cachorro perdido',
         date: DateTime(2024, 1, 12),
@@ -25,6 +26,7 @@ class MissingPostRepository extends ChangeNotifier {
         user: userRepository.users[0],
       ),
       MissingPost(
+        id: '1001',
         location: 'Rua 2',
         description: 'Gato perdido',
         date: DateTime(2023, 10, 23),
@@ -45,11 +47,9 @@ class MissingPostRepository extends ChangeNotifier {
   }
 
   updateMissingPost(MissingPost missingPost) {
-    var index = missingPosts
-        .indexWhere((p) => p.description == missingPost.description);
-    if (index != -1) {
-      missingPosts[index] = missingPost;
-      notifyListeners();
-    }
+    var index =
+        missingPosts.indexWhere((element) => element.id == missingPost.id);
+    missingPosts[index] = missingPost;
+    notifyListeners();
   }
 }

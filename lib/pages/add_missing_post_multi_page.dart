@@ -8,9 +8,11 @@ import 'package:projeto/repositories/missing_post_repository.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class MultiStepForm extends StatefulWidget {
-  const MultiStepForm({super.key});
+  final MissingPost? initialData;
+  const MultiStepForm({this.initialData, super.key});
 
   @override
   State<MultiStepForm> createState() => _MultiStepFormState();
@@ -45,18 +47,27 @@ class _MultiStepFormState extends State<MultiStepForm> {
     );
     if (_formData['isNewPet'] as bool) {
       petProvider.addPet(
-        Pet(
-          name: _formData['name'] as String,
-          type: _formData['type'] as PetType,
-          breed: _formData['breed'] as String,
-          color: _formData['color'] as String,
-          status: Status.lost,
-          owner: CurrentUser.currentUser as User,
-        ),
+        _formData['pet'] as Pet,
       );
     }
+    if (widget.initialData != null) {
+      postProvider.updateMissingPost(
+        MissingPost(
+          id: widget.initialData!.id,
+          location: _formData['location'] as String,
+          description: _formData['description'] as String,
+          date: DateTime.parse(_formData['date'] as String),
+          pet: _formData['pet'] as Pet,
+          user: CurrentUser.currentUser as User,
+        ),
+      );
+      Navigator.pop(context);
+      return;
+    }
+
     postProvider.addMissingPost(
       MissingPost(
+        id: Uuid().v4(),
         location: _formData['location'] as String,
         description: _formData['description'] as String,
         date: DateTime.parse(_formData['date'] as String),
@@ -90,14 +101,16 @@ class _MultiStepFormState extends State<MultiStepForm> {
   Widget _buildStep1() {
     return AddMissingPostPetPage(
       onNextStep: onNextStep,
+      initialData: widget.initialData,
     );
   }
 
   Widget _buildStep2() {
     if (_formData['pet'] != null) {
       return AddMissingPostDetailsPage(
-        pet: _formData['pet'] as Pet,
         onNextStep: onNextStep,
+        initialData: widget.initialData,
+        pet: _formData['pet'] as Pet,
       );
     }
     return const Center(

@@ -5,6 +5,7 @@ enum PetType { dog, cat, bird, fish, rabbit, hamster, turtle, guineaPig, other }
 enum Status { lost, found }
 
 class Pet {
+  String id;
   String? name;
   PetType type;
   String? breed;
@@ -20,7 +21,8 @@ class Pet {
   }
 
   Pet(
-      {this.name,
+      {required this.id,
+      this.name,
       required this.type,
       this.breed,
       this.color,

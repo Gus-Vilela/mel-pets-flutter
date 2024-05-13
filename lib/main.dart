@@ -5,6 +5,7 @@ import 'package:projeto/firebase_options.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/sighted_repository.dart';
+import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (context) => AuthService()),
       ChangeNotifierProvider(
         create: (context) => PetRepository(),
       ),

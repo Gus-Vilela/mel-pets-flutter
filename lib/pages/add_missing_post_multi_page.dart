@@ -78,7 +78,9 @@ class _MultiStepFormState extends State<MultiStepForm> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],
-        title: const Text('Novo post de pet perdido'),
+        title: widget.initialData == null
+            ? const Text('Novo desaparecimento')
+            : const Text('Editar desaparecimento'),
       ),
       body: PageView(
         controller: _controller,

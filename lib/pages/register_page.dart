@@ -18,7 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
   late UserRepository userRepository;
-
   bool isLoading = false;
 
   @override
@@ -35,7 +34,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 email.text,
                 password.text,
               );
-
           var user = User(
             id: context.read<AuthService>().user!.uid,
             email: email.text,

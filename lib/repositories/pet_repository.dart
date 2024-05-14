@@ -52,24 +52,37 @@ class PetRepository extends ChangeNotifier {
     }
   }
 
-  Pet getPetById(String id) {
-    return _pets.firstWhere((p) => p.id == id);
+  deletePet(Pet pet) {
+    try {
+      db.collection('pets').doc(pet.id).delete();
+      _pets.remove(pet);
+      notifyListeners();
+    } catch (e) {
+      print('Error deleting pet: $e');
+    }
   }
 
   updatePet(Pet pet) {
-    var index = _pets.indexWhere((p) => p.id == pet.id);
-    _pets[index] = pet;
-    notifyListeners();
+    try {
+      var index = _pets.indexWhere((p) => p.id == pet.id);
+      _pets[index] = pet;
+      db.collection('pets').doc(pet.id).update(pet.toMap());
+      notifyListeners();
+    } catch (e) {
+      print('Error updating pet: $e');
+    }
   }
 
-  deletePet(Pet pet) {
-    _pets.removeWhere((p) => p.name == pet.name);
-    notifyListeners();
+  Pet? getPetById(String id) {
+    try {
+      return _pets.firstWhere((element) => element.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 
   petFound(Pet pet) {
-    var index = _pets.indexWhere((p) => p.id == pet.id);
-    _pets[index].status = Status.found;
-    notifyListeners();
+    pet.status = Status.found;
+    updatePet(pet);
   }
 }

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:projeto/models/pet.dart';
 import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/pet_repository.dart';
-import 'package:projeto/repositories/user_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';

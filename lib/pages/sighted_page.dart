@@ -39,8 +39,8 @@ class _SightedPageState extends State<SightedPage> {
     await showDialog(
       context: context,
       builder: (_) => _AddSightingDialog(
-        onSightingAdded: (sighting) {
-          _sightedRepository.addSighting(sighting);
+        onSightingAdded: (sighting) async {
+          await _sightedRepository.addSighting(sighting);
         },
       ),
     );
@@ -151,7 +151,7 @@ class _SightedPageState extends State<SightedPage> {
 }
 
 class _AddSightingDialog extends StatefulWidget {
-  final Function(Sighted) onSightingAdded;
+  final Future<void> Function(Sighted) onSightingAdded;
 
   const _AddSightingDialog({required this.onSightingAdded});
 
@@ -229,7 +229,7 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
       ),
       actions: [
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             Sighted newSighting = Sighted(
               id: const Uuid().v4(),
               color: _color,
@@ -240,10 +240,14 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
               city: _city,
               userId: context.read<AuthService>().user!.uid,
             );
-            widget.onSightingAdded(newSighting);
+            await widget.onSightingAdded(newSighting);
             Navigator.pop(context);
           },
-          child: const Text('Adicionar'),
+          child: context.watch<SightedRepository>().isLoading
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+              : const Text('Adicionar'),
         ),
       ],
     );

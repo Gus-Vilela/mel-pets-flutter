@@ -44,44 +44,50 @@ class _MissingPageState extends State<MissingPage> {
         // list of missing posts
         child: Consumer<MissingPostRepository>(
             builder: (context, missingPostRepository, child) {
-          return ListView.builder(
-            itemCount: missingPostRepository.missingPosts.length,
-            itemBuilder: (context, post) {
-              Pet? pet = petRepository
-                  .getPetById(missingPostRepository.missingPosts[post].petId);
-              return pet == null
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Card.outlined(
-                      shadowColor: Colors.red,
-                      color: Colors.red[100],
-                      child: ListTile(
-                        title: Text(
-                          missingPostRepository.missingPosts[post].description,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(pet.name as String),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: pet.image != null
-                              ? Image.asset(
-                                  pet.image as String,
-                                  width: 65,
-                                  height: 65,
-                                )
-                              : const SizedBox(
-                                  width: 65, // increase this value
-                                  height: 65, // increase this value
-                                  child: Icon(Icons.pets, size: 45),
-                                ),
-                        ),
-                        onTap: () => onShowDetails(
-                            missingPostRepository.missingPosts[post].id),
-                      ),
-                    );
-            },
-          );
+          return missingPostRepository.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemCount: missingPostRepository.allMissingPosts.length,
+                  itemBuilder: (context, post) {
+                    Pet? pet = petRepository.getPetById(
+                        missingPostRepository.allMissingPosts[post].petId);
+                    return pet == null
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Card.outlined(
+                            shadowColor: Colors.red,
+                            color: Colors.red[100],
+                            child: ListTile(
+                              title: Text(
+                                missingPostRepository
+                                    .allMissingPosts[post].description,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(pet.name as String),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: pet.image != null
+                                    ? Image.asset(
+                                        pet.image as String,
+                                        width: 65,
+                                        height: 65,
+                                      )
+                                    : const SizedBox(
+                                        width: 65, // increase this value
+                                        height: 65, // increase this value
+                                        child: Icon(Icons.pets, size: 45),
+                                      ),
+                              ),
+                              onTap: () => onShowDetails(missingPostRepository
+                                  .allMissingPosts[post].id),
+                            ),
+                          );
+                  },
+                );
         }),
       ),
       floatingActionButton: FloatingActionButton(

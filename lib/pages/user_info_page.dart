@@ -20,7 +20,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         ),
         body:
             Consumer<UserRepository>(builder: (context, userRepository, child) {
-          return userRepository.currentUser == null
+          return userRepository.currentUser == null || userRepository.isLoading
               ? const Center(
                   child: CircularProgressIndicator(),
                 )

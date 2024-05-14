@@ -9,6 +9,7 @@ class SightedRepository extends ChangeNotifier {
   final List<Sighted> _sighteds = [];
   late FirebaseFirestore db;
   late AuthService authService;
+  bool isLoading = false;
 
   UnmodifiableListView<Sighted> get allSightings =>
       UnmodifiableListView(_sighteds);
@@ -30,30 +31,35 @@ class SightedRepository extends ChangeNotifier {
 
   _readAllSightings() async {
     try {
+      isLoading = true;
+      notifyListeners();
       final querySnapshot = await db.collection('sighted').get();
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
         final sighted = Sighted.fromMap(data);
         _sighteds.add(sighted);
       }
-      notifyListeners();
     } catch (e) {
       print('Error reading all sightings: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
   addSighting(Sighted sighted) async {
     try {
+      isLoading = true;
+      notifyListeners();
       _sighteds.add(sighted);
       await db.collection('sighted').doc(sighted.id).set(sighted.toMap());
-      notifyListeners();
     } catch (e) {
       print('Error adding sighting: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
   filteredSightings(String searchText, String selectedSearchItem) {
-    print('searchText: $searchText');
     if (searchText.isEmpty) {
       return _sighteds;
     }
@@ -85,14 +91,17 @@ class SightedRepository extends ChangeNotifier {
     }
   }
 
-  void deleteSighting(String id) {
+  deleteSighting(String id) async {
     try {
-      db.collection('sighted').doc(id).delete();
-      _sighteds.removeWhere((s) => s.id == id);
+      isLoading = true;
       notifyListeners();
+      await db.collection('sighted').doc(id).delete();
+      _sighteds.removeWhere((s) => s.id == id);
     } catch (e) {
       print('Error deleting sighting: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
   void updateSighting(Sighted sighted) {

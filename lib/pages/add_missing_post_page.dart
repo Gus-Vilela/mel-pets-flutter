@@ -23,7 +23,7 @@ String petTypeToString(PetType type) {
 List<String> _petTypes = getPetTypeStrings();
 
 class AddMissingPostPetPage extends StatefulWidget {
-  final Function(Map<String, dynamic>) onNextStep;
+  final Future<void> Function(Map<String, dynamic>) onNextStep;
   final MissingPost? initialData;
   const AddMissingPostPetPage(
       {super.key, required this.onNextStep, this.initialData});
@@ -76,11 +76,11 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
     }
   }
 
-  onSubmit() {
+  onSubmit() async {
     if (selectedPet != null) {
       selectedPet?.status = Status.lost;
-      petRepository.updatePet(selectedPet!);
-      return widget.onNextStep({
+      await petRepository.updatePet(selectedPet!);
+      return await widget.onNextStep({
         'pet': selectedPet,
         'isNewPet': false,
       });
@@ -307,7 +307,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
                         await _selectDate();
                       },
                       decoration: InputDecoration(
-                        labelText: 'Selecione uma data',
+                        labelText: 'Selecione a data de nascimento',
                         labelStyle: const TextStyle(
                             color: Colors.black87, fontSize: 18),
                         errorStyle: const TextStyle(color: Colors.red),
@@ -345,7 +345,11 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
         onPressed: () {
           onSubmit();
         },
-        child: const Icon(Icons.navigate_next),
+        child: context.watch<PetRepository>().isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : const Icon(Icons.navigate_next),
       ),
     );
   }

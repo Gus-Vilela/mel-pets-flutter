@@ -1,4 +1,4 @@
-## Projeto - Entrega 1
+## Projeto - Entrega 2
 
 ## Integrantes
 - Gustavo Vilela

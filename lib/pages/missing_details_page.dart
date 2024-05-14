@@ -20,12 +20,12 @@ class MissingDetailsPage extends StatefulWidget {
 class _MissingDetailsPageState extends State<MissingDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    var missingPost = Provider.of<MissingPostRepository>(
-      context,
-      listen: true,
-    ).missingPosts.firstWhere(
-          (element) => element.id == widget.postId,
-        );
+    var petRepository = context.watch<PetRepository>();
+    var userRepository = context.watch<UserRepository>();
+    var missingPostRepository = context.watch<MissingPostRepository>();
+    var missingPost = missingPostRepository.getMissingPostById(widget.postId);
+    var pet = petRepository.getPetById(missingPost.petId);
+    var user = userRepository.getUserById(missingPost.userId);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],
@@ -110,7 +110,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (missingPost.pet.image != null)
+                    if (pet.image != null)
                       Container(
                         width: 125.0,
                         height: 125.0,
@@ -119,14 +119,14 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: AssetImage(
-                              missingPost.pet.image as String,
+                              pet.image as String,
                             ),
                           ),
                         ),
                       ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text(missingPost.pet.name as String, // user name
+                      child: Text(pet.name as String, // user name
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -158,7 +158,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          petTypeToString(missingPost.pet.type),
+                          petTypeToString(pet.type),
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -175,7 +175,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.pet.breed as String,
+                          pet.breed as String,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -191,7 +191,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.pet.color as String,
+                          pet.color as String,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -224,11 +224,11 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.pet.userId == null
+                          pet.userId == null
                               ? 'Desconhecido'
                               : context
                                   .read<UserRepository>()
-                                  .getUserById(missingPost.pet.userId as String)
+                                  .getUserById(pet.userId as String)
                                   .name,
                           style: const TextStyle(
                             fontSize: 16,
@@ -243,7 +243,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.user.email,
+                          user.email,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -258,7 +258,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.user.phone as String,
+                          user.phone as String,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -272,7 +272,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.user.address as String,
+                          user.address as String,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -287,7 +287,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.user.city as String,
+                          user.city as String,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -301,7 +301,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
           ],
         ),
       ),
-      floatingActionButton: (missingPost.user.id == CurrentUser.currentUser.id)
+      floatingActionButton: (user.id == userRepository.currentUser!.id)
           ? Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -315,7 +315,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                         listen: false,
                       );
                       petProvider.petFound(
-                        missingPost.pet,
+                        pet,
                       );
                       var postProvider = Provider.of<MissingPostRepository>(
                         context,

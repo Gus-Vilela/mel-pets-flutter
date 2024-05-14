@@ -7,6 +7,7 @@ import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -57,8 +58,8 @@ class _MultiStepFormState extends State<MultiStepForm> {
           location: _formData['location'] as String,
           description: _formData['description'] as String,
           date: DateTime.parse(_formData['date'] as String),
-          pet: _formData['pet'] as Pet,
-          user: CurrentUser.currentUser,
+          petId: _formData['pet'].id,
+          userId: context.read<AuthService>().user!.uid,
         ),
       );
       Navigator.pop(context);
@@ -71,8 +72,8 @@ class _MultiStepFormState extends State<MultiStepForm> {
         location: _formData['location'] as String,
         description: _formData['description'] as String,
         date: DateTime.parse(_formData['date'] as String),
-        pet: _formData['pet'] as Pet,
-        user: CurrentUser.currentUser,
+        petId: _formData['pet'].id,
+        userId: context.read<AuthService>().user!.uid,
       ),
     );
     Navigator.pop(context);

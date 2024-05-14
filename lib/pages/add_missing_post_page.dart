@@ -68,8 +68,9 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
         .map((pet) => pet)
         .toList();
     if (widget.initialData != null) {
-      pets.add(widget.initialData!.pet);
-      selectedPet = widget.initialData!.pet;
+      pets.add(
+          context.read<PetRepository>().getPetById(widget.initialData!.petId));
+      selectedPet = pets.last;
     }
   }
 

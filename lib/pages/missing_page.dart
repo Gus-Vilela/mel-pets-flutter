@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto/pages/add_missing_post_multi_page.dart';
 import 'package:projeto/pages/missing_details_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
+import 'package:projeto/repositories/pet_repository.dart';
 import 'package:provider/provider.dart';
 
 class MissingPage extends StatefulWidget {
@@ -30,6 +31,8 @@ class _MissingPageState extends State<MissingPage> {
       );
     }
 
+    var petRepository = context.watch<PetRepository>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],
@@ -43,6 +46,9 @@ class _MissingPageState extends State<MissingPage> {
           return ListView.builder(
             itemCount: missingPostRepository.missingPosts.length,
             itemBuilder: (context, post) {
+              var pet = petRepository
+                  .getPetById(missingPostRepository.missingPosts[post].petId);
+
               return Card.outlined(
                 shadowColor: Colors.red,
                 color: Colors.red[100],
@@ -51,15 +57,12 @@ class _MissingPageState extends State<MissingPage> {
                     missingPostRepository.missingPosts[post].description,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(missingPostRepository
-                      .missingPosts[post].pet.name as String),
+                  subtitle: Text(pet.name as String),
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: missingPostRepository.missingPosts[post].pet.image !=
-                            null
+                    child: pet.image != null
                         ? Image.asset(
-                            missingPostRepository.missingPosts[post].pet.image
-                                as String,
+                            pet.image as String,
                             width: 65,
                             height: 65,
                           )

@@ -10,7 +10,6 @@ class PetRepository extends ChangeNotifier {
   final List<Pet> _pets = [];
   late FirebaseFirestore db;
   late AuthService authService;
-  // final UserRepository userReposistory = UserRepository();
 
   UnmodifiableListView<Pet> get allPets => UnmodifiableListView(_pets);
 
@@ -29,39 +28,6 @@ class PetRepository extends ChangeNotifier {
     db = DBFirestore.get();
   }
 
-  // PetRepository() {
-  //   pets.addAll([
-  //     Pet(
-  //         id: '1001',
-  //         name: 'Rex',
-  //         type: PetType.cachorro,
-  //         breed: 'Golden Retriever',
-  //         dateOfBirth: DateTime(2018, 5, 20),
-  //         color: 'Dourada',
-  //         image: 'images/pets/Golden.jpg',
-  //         status: Status.lost,
-  //         owner: CurrentUser.currentUser),
-  //     Pet(
-  //         id: '1002',
-  //         name: 'Tina',
-  //         type: PetType.gato,
-  //         breed: 'Siamesa',
-  //         dateOfBirth: DateTime(2019, 2, 10),
-  //         color: 'White',
-  //         image: 'images/pets/catinho.jpg',
-  //         status: Status.lost,
-  //         owner: CurrentUser.currentUser),
-  //     Pet(
-  //       id: '1003',
-  //       name: 'DefftonesSwabbers',
-  //       type: PetType.cachorro,
-  //       breed: 'Pitbull',
-  //       dateOfBirth: DateTime(2017, 10, 10),
-  //       color: 'Black',
-  //       status: Status.found,
-  //     )
-  //   ]);
-  // }
   _readAllPets() async {
     try {
       final querySnapshot = await db.collection('pets').get();

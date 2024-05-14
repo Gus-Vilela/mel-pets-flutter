@@ -8,13 +8,14 @@ import 'package:projeto/services/auth.service.dart';
 
 class UserRepository extends ChangeNotifier {
   final List<User> _users = [];
-  User? _currentUser;
   late FirebaseFirestore db;
   late AuthService authService;
   bool isLoading = false;
 
   UnmodifiableListView<User> get users => UnmodifiableListView(_users);
-  User? get currentUser => _currentUser;
+  User? get currentUser => users.isNotEmpty
+      ? users.firstWhere((u) => u.id == authService.user!.uid)
+      : null;
 
   UserRepository({required this.authService}) {
     _startRepository();
@@ -22,8 +23,7 @@ class UserRepository extends ChangeNotifier {
 
   _startRepository() async {
     await _startFirestore();
-    await _readAllUsers();
-    _currentUser = getUserById(authService.user!.uid);
+    await readAllUsers();
   }
 
   _startFirestore() async {
@@ -34,7 +34,7 @@ class UserRepository extends ChangeNotifier {
     return _users;
   }
 
-  _readAllUsers() async {
+  readAllUsers() async {
     try {
       isLoading = true;
       notifyListeners();

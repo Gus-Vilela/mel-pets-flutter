@@ -13,7 +13,7 @@ class SightingDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCurrentUserCreator = sighting.user.id == CurrentUser.currentUser.id;
+    final isCurrentUserCreator = sighting.userId == CurrentUser.currentUser.id;
 
     return Scaffold(
       appBar: AppBar(

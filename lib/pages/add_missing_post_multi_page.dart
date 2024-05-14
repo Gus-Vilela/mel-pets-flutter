@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/models/pet.dart';
-import 'package:projeto/models/user.dart';
 import 'package:projeto/pages/add_missing_post_details_page.dart';
 import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
 import 'package:projeto/repositories/pet_repository.dart';
-import 'package:projeto/repositories/user_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -23,6 +21,8 @@ class _MultiStepFormState extends State<MultiStepForm> {
   int _currentStep = 0;
   final PageController _controller = PageController();
   final Map<String, dynamic> _formData = {};
+  late MissingPostRepository postRepository;
+  late PetRepository petRepository;
 
   onNextStep(
     Map<String, dynamic> data,
@@ -38,21 +38,13 @@ class _MultiStepFormState extends State<MultiStepForm> {
       });
       return;
     }
-    var postProvider = Provider.of<MissingPostRepository>(
-      context,
-      listen: false,
-    );
-    var petProvider = Provider.of<PetRepository>(
-      context,
-      listen: false,
-    );
     if (_formData['isNewPet'] as bool) {
-      petProvider.addPet(
+      petRepository.addPet(
         _formData['pet'] as Pet,
       );
     }
     if (widget.initialData != null) {
-      postProvider.updateMissingPost(
+      postRepository.updateMissingPost(
         MissingPost(
           id: widget.initialData!.id,
           location: _formData['location'] as String,
@@ -66,7 +58,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
       return;
     }
 
-    postProvider.addMissingPost(
+    postRepository.addMissingPost(
       MissingPost(
         id: Uuid().v4(),
         location: _formData['location'] as String,
@@ -81,6 +73,8 @@ class _MultiStepFormState extends State<MultiStepForm> {
 
   @override
   Widget build(BuildContext context) {
+    postRepository = context.read<MissingPostRepository>();
+    petRepository = context.read<PetRepository>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],

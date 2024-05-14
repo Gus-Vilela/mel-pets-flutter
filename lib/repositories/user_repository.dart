@@ -78,10 +78,13 @@ class UserRepository extends ChangeNotifier {
   }
 
   updateUser(User user) {
-    final index = _users.indexWhere((u) => u.email == user.email);
-    if (index >= 0) {
+    try {
+      var index = _users.indexWhere((u) => u.id == user.id);
       _users[index] = user;
-      notifyListeners();
+      db.collection('users').doc(user.id).update(user.toMap());
+    } catch (e) {
+      print('Erro ao atualizar usuário: $e');
     }
+    notifyListeners();
   }
 }

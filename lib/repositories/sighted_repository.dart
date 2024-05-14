@@ -77,18 +77,27 @@ class SightedRepository extends ChangeNotifier {
     }).toList();
   }
 
-  Sighted getSightingById(String id) {
-    return _sighteds.firstWhere((s) => s.id == id);
+  Sighted? getSightingById(String id) {
+    try {
+      return _sighteds.firstWhere((element) => element.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  void deleteSighting(String id) {
+    try {
+      db.collection('sighted').doc(id).delete();
+      _sighteds.removeWhere((s) => s.id == id);
+      notifyListeners();
+    } catch (e) {
+      print('Error deleting sighting: $e');
+    }
   }
 
   void updateSighting(Sighted sighted) {
     var index = _sighteds.indexWhere((s) => s.id == sighted.id);
     _sighteds[index] = sighted;
-    notifyListeners();
-  }
-
-  void deleteSighting(String id) {
-    _sighteds.removeWhere((sighting) => sighting.id == id);
     notifyListeners();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto/models/pet.dart';
+import 'package:projeto/models/user.dart';
 import 'package:projeto/pages/add_missing_post_multi_page.dart';
 import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
@@ -24,8 +25,25 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
     var userRepository = context.watch<UserRepository>();
     var missingPostRepository = context.watch<MissingPostRepository>();
     var missingPost = missingPostRepository.getMissingPostById(widget.postId);
-    var pet = petRepository.getPetById(missingPost.petId);
-    var user = userRepository.getUserById(missingPost.userId);
+
+    if (missingPost == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    Pet? pet = petRepository.getPetById(missingPost.petId);
+    User user = userRepository.getUserById(missingPost.userId);
+
+    if (pet == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],
@@ -310,18 +328,10 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                   height: 45,
                   child: FloatingActionButton(
                     onPressed: () {
-                      var petProvider = Provider.of<PetRepository>(
-                        context,
-                        listen: false,
-                      );
-                      petProvider.petFound(
+                      petRepository.petFound(
                         pet,
                       );
-                      var postProvider = Provider.of<MissingPostRepository>(
-                        context,
-                        listen: false,
-                      );
-                      postProvider.removeMissingPost(missingPost);
+                      missingPostRepository.removeMissingPost(missingPost);
                       Navigator.pop(context);
                     },
                     heroTag: 'deletar',

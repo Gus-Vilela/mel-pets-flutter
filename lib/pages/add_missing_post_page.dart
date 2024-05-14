@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/models/pet.dart';
 import 'package:projeto/repositories/pet_repository.dart';
-import 'package:projeto/repositories/user_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -56,29 +55,31 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
   final _dateController = TextEditingController();
   List<Pet> pets = [];
   Pet? selectedPet;
+  late PetRepository petRepository;
 
   @override
   void initState() {
     super.initState();
-    pets = Provider.of<PetRepository>(context, listen: false)
-        .allPets
+    petRepository = context.read<PetRepository>();
+    pets = petRepository.allPets
         .where((pet) =>
             pet.userId == context.read<AuthService>().user!.uid &&
             pet.status != Status.lost)
         .map((pet) => pet)
         .toList();
     if (widget.initialData != null) {
-      pets.add(
-          context.read<PetRepository>().getPetById(widget.initialData!.petId));
-      selectedPet = pets.last;
+      Pet? pet = petRepository.getPetById(widget.initialData!.petId);
+      if (pet != null) {
+        pets.add(pet);
+        selectedPet = pet;
+      }
     }
   }
 
   onSubmit() {
     if (selectedPet != null) {
       selectedPet?.status = Status.lost;
-      Provider.of<PetRepository>(context, listen: false)
-          .updatePet(selectedPet!);
+      petRepository.updatePet(selectedPet!);
       return widget.onNextStep({
         'pet': selectedPet,
         'isNewPet': false,

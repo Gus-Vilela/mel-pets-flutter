@@ -52,18 +52,34 @@ class MissingPostRepository extends ChangeNotifier {
   }
 
   removeMissingPost(MissingPost missingPost) {
-    missingPosts.remove(missingPost);
-    notifyListeners();
+    try {
+      db.collection('missing_posts').doc(missingPost.id).delete();
+      missingPosts.remove(missingPost);
+      notifyListeners();
+    } catch (e) {
+      print('Erro ao remover post: $e');
+    }
   }
 
-  getMissingPostById(String id) {
-    return missingPosts.firstWhere((element) => element.id == id);
+  MissingPost? getMissingPostById(String id) {
+    try {
+      return missingPosts.firstWhere((element) => element.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 
   updateMissingPost(MissingPost missingPost) {
-    var index =
-        missingPosts.indexWhere((element) => element.id == missingPost.id);
-    missingPosts[index] = missingPost;
-    notifyListeners();
+    try {
+      var index = missingPosts.indexWhere((p) => p.id == missingPost.id);
+      missingPosts[index] = missingPost;
+      db
+          .collection('missing_posts')
+          .doc(missingPost.id)
+          .update(missingPost.toMap());
+      notifyListeners();
+    } catch (e) {
+      print('Erro ao atualizar post: $e');
+    }
   }
 }

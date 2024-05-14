@@ -15,6 +15,7 @@ class SightedPage extends StatefulWidget {
 }
 
 class _SightedPageState extends State<SightedPage> {
+  late SightedRepository _sightedRepository;
   late List<Sighted> _filteredSightings;
   final TextEditingController _searchController = TextEditingController();
   String _selectedSearchItem = 'Cor';
@@ -27,10 +28,10 @@ class _SightedPageState extends State<SightedPage> {
 
   void _searchSightings() {
     setState(() {
-      _filteredSightings = context.read<SightedRepository>().filteredSightings(
-            _searchController.text,
-            _selectedSearchItem,
-          );
+      _filteredSightings = _sightedRepository.filteredSightings(
+        _searchController.text,
+        _selectedSearchItem,
+      );
     });
   }
 
@@ -39,10 +40,7 @@ class _SightedPageState extends State<SightedPage> {
       context: context,
       builder: (_) => _AddSightingDialog(
         onSightingAdded: (sighting) {
-          Provider.of<SightedRepository>(
-            context,
-            listen: false,
-          ).addSighting(sighting);
+          _sightedRepository.addSighting(sighting);
         },
       ),
     );
@@ -50,10 +48,11 @@ class _SightedPageState extends State<SightedPage> {
 
   @override
   Widget build(BuildContext context) {
-    _filteredSightings = context.watch<SightedRepository>().filteredSightings(
-          _searchController.text,
-          _selectedSearchItem,
-        );
+    _sightedRepository = context.watch<SightedRepository>();
+    _filteredSightings = _sightedRepository.filteredSightings(
+      _searchController.text,
+      _selectedSearchItem,
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],

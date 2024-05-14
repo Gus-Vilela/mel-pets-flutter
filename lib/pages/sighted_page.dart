@@ -6,6 +6,7 @@ import 'package:projeto/repositories/sighted_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 
 class SightedPage extends StatefulWidget {
   const SightedPage({super.key});
@@ -136,8 +137,14 @@ class _SightedPageState extends State<SightedPage> {
               });
               Navigator.pop(context);
             },
-            items: <String>['Cor', 'Raça', 'Descrição', 'Endereço', 'Cidade']
-                .map<DropdownMenuItem<String>>((String value) {
+            items: <String>[
+              'Cor',
+              'Raça',
+              'Descrição',
+              'Endereço',
+              'Cidade',
+              'Visto em'
+            ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -166,12 +173,30 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
   late String _description;
   late String _address;
   late String _city;
-  late DateTime _dateOfSight;
+  DateTime? _dateOfSight;
+  late TextEditingController _dateController;
 
   @override
   void initState() {
     super.initState();
     _type = PetType.cachorro;
+    // _dateOfSight = DateTime.now();
+    _dateController = TextEditingController();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != _dateOfSight) {
+      setState(() {
+        _dateOfSight = picked;
+        _dateController.text = DateFormat('dd/MM/yyyy').format(_dateOfSight!);
+      });
+    }
   }
 
   @override
@@ -183,9 +208,26 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Cor', focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]!),
-                  ),),
+              controller: _dateController,
+              readOnly:true,
+              decoration: InputDecoration(
+                labelText: 'Data do Avistamento',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.calendar_today),
+                  onPressed: () => _selectDate(context),
+                ),
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Cor',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+              ),
               onChanged: (value) => _color = value,
             ),
             DropdownButtonFormField<PetType>(
@@ -209,35 +251,47 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
                   child: Text('Outro'),
                 ),
               ],
-              decoration: InputDecoration(labelText: 'Espécie', focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]!),
-                  ),),
+              decoration: InputDecoration(
+                labelText: 'Espécie',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+              ),
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Raça',
-               focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]!),
-                  ),
-                  ),
+              decoration: InputDecoration(
+                labelText: 'Raça',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+              ),
               onChanged: (value) => _breed = value,
-             
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Descrição', focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]!),
-                  ),),
+              decoration: InputDecoration(
+                labelText: 'Descrição',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+              ),
               onChanged: (value) => _description = value,
             ),
             TextField(
-              decoration:  InputDecoration(labelText: 'Endereço', focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]!),
-                  ),),
+              decoration: InputDecoration(
+                labelText: 'Endereço',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+              ),
               onChanged: (value) => _address = value,
             ),
             TextField(
-              decoration:  InputDecoration(labelText: 'Cidade', focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]!),
-                  ),),
+              decoration: InputDecoration(
+                labelText: 'Cidade',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]!),
+                ),
+              ),
               onChanged: (value) => _city = value,
             ),
           ],
@@ -261,10 +315,11 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
             Navigator.pop(context);
           },
           style: ButtonStyle(
-            foregroundColor:MaterialStateProperty.all<Color?>(Colors.red[300]),
+            foregroundColor: MaterialStateProperty.all<Color?>(Colors.black87),
+            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                (states) => Colors.red[100]),
           ),
           child: const Text('Adicionar'),
-          
         ),
       ],
     );

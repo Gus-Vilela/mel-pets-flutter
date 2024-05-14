@@ -38,6 +38,7 @@ class Sighted {
   }
 
   factory Sighted.fromMap(Map<String, dynamic> map) {
+    print(map);
     return Sighted(
       id: map['id'] as String,
       dateOfSight: map['dateOfSight'] == null

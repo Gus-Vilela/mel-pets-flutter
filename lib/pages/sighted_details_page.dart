@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:projeto/models/sighted.dart';
 import 'package:projeto/repositories/sighted_repository.dart';
 import 'package:projeto/services/auth.service.dart';
@@ -26,7 +27,8 @@ class SightingDetailsPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[100],
       ),
-      body: Container(
+      body: 
+      Container(
          padding: const EdgeInsets.symmetric(
         vertical: 10.0, horizontal: 20.0),
          margin: const EdgeInsets.symmetric(
@@ -43,11 +45,20 @@ class SightingDetailsPage extends StatelessWidget {
           children: [
             Row(
               children: [
+                Icon(Icons.calendar_month, color: Colors.grey[80]),
+                const SizedBox(width: 8),
+                Text(
+                  'Visto em: ${sighting.dateOfSight != null ? DateFormat('dd/MM/yyyy').format(sighting.dateOfSight!) : 'Não especificada'}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            Row(
+              children: [
                 Icon(Icons.color_lens, color: Colors.grey[80]),
                 const SizedBox(width: 8),
                 Text(
                   'Cor: ${sighting.color}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -56,7 +67,7 @@ class SightingDetailsPage extends StatelessWidget {
               children: [
                 Icon(Icons.pets, color: Colors.grey[80]),
                 const SizedBox(width: 8),
-                Text('Espécie: ${sighting.type}'),
+                Text('Espécie: ${sighting.type.name}'),
               ],
             ),
             const SizedBox(height: 8),

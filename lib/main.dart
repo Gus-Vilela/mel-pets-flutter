@@ -5,6 +5,7 @@ import 'package:projeto/firebase_options.dart';
 import 'package:projeto/repositories/missing_post_repository.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/sighted_repository.dart';
+import 'package:projeto/repositories/user_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 
@@ -19,14 +20,17 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (context) => AuthService()),
       ChangeNotifierProvider(
-        create: (context) => PetRepository(),
-      ),
+          create: (context) =>
+              PetRepository(authService: context.read<AuthService>())),
       ChangeNotifierProvider(
         create: (context) => MissingPostRepository(),
       ),
       ChangeNotifierProvider(
         create: (context) => SightedRepository(),
       ),
+      ChangeNotifierProvider(
+          create: (context) =>
+              UserRepository(authService: context.read<AuthService>())),
     ],
     child: const App(),
   ));

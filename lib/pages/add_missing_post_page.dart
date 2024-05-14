@@ -4,6 +4,7 @@ import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/models/pet.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -62,7 +63,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
     pets = Provider.of<PetRepository>(context, listen: false)
         .allPets
         .where((pet) =>
-            pet.owner?.email == CurrentUser.currentUser.email &&
+            pet.userId == context.read<AuthService>().user!.uid &&
             pet.status != Status.lost)
         .map((pet) => pet)
         .toList();
@@ -92,7 +93,7 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
           type: stringToPetType(_value2.text),
           breed: _value3.text,
           color: _value4.text,
-          owner: CurrentUser.currentUser,
+          userId: context.read<AuthService>().user!.uid,
           status: Status.lost,
           dateOfBirth: DateFormat('yyyy-MM-dd').parse(_dateController.text),
         ),
@@ -335,7 +336,6 @@ class _AddMissingPostPageState extends State<AddMissingPostPetPage> {
                   ],
                 ),
               ),
-            
           ],
         ),
       ),

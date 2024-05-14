@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto/pages/home_page.dart';
 import 'package:projeto/widget/auth_check.dart';
 
 class App extends StatelessWidget {

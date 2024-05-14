@@ -4,6 +4,7 @@ import 'package:projeto/pages/add_pet_page.dart';
 import 'package:projeto/pages/pet_details_page.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 
 class myPetsPage extends StatefulWidget {
@@ -39,8 +40,9 @@ class _myPetsPageState extends State<myPetsPage> {
         // list of missing posts
         child:
             Consumer<PetRepository>(builder: (context, petRepository, child) {
-          var userPets = petRepository.pets
-              .where((pet) => pet.owner?.id == CurrentUser.currentUser.id)
+          var userPets = petRepository.allPets
+              .where(
+                  (pet) => pet.userId == context.read<AuthService>().user!.uid)
               .toList();
 
           return ListView.builder(

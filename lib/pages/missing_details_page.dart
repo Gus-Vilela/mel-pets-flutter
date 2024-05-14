@@ -224,9 +224,12 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          missingPost.pet.owner == null
+                          missingPost.pet.userId == null
                               ? 'Desconhecido'
-                              : missingPost.pet.owner!.name,
+                              : context
+                                  .read<UserRepository>()
+                                  .getUserById(missingPost.pet.userId as String)
+                                  .name,
                           style: const TextStyle(
                             fontSize: 16,
                           ),

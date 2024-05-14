@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto/models/pet.dart';
+import 'package:projeto/models/user.dart';
 import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/pet_repository.dart';
+import 'package:projeto/repositories/user_repository.dart';
 import 'package:provider/provider.dart';
 
 class PetDetailsPage extends StatefulWidget {
@@ -203,7 +205,12 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        pet.owner == null ? 'Desconhecido' : pet.owner!.name,
+                        pet.userId == null
+                            ? 'Desconhecido'
+                            : context
+                                .read<UserRepository>()
+                                .getUserById(pet.userId as String)
+                                .name,
                         style: const TextStyle(
                           fontSize: 16,
                         ),

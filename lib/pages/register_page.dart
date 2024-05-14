@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto/models/user.dart';
+import 'package:projeto/repositories/user_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 
@@ -15,38 +17,48 @@ class _RegisterPageState extends State<RegisterPage> {
   final name = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
+  late UserRepository userRepository;
 
   bool isLoading = false;
 
-  register() async {
-    if (formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = true;
-      });
-      try {
-        await context.read<AuthService>().register(
-              email.text,
-              password.text,
-            );
-
-        Navigator.pop(context);
-      } on AuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.message),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    userRepository = context.watch<UserRepository>();
+
+    register() async {
+      if (formKey.currentState!.validate()) {
+        setState(() {
+          isLoading = true;
+        });
+        try {
+          await context.read<AuthService>().register(
+                email.text,
+                password.text,
+              );
+
+          var user = User(
+            id: context.read<AuthService>().user!.uid,
+            email: email.text,
+            name: name.text,
+          );
+
+          await userRepository.addUser(user);
+          Navigator.pop(context);
+        } on AuthException catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } finally {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],

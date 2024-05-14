@@ -4,6 +4,7 @@ import 'package:projeto/models/pet.dart';
 import 'package:projeto/pages/add_missing_post_page.dart';
 import 'package:projeto/repositories/pet_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -201,7 +202,7 @@ class _AddPetPageState extends State<AddPetPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState!.validate()) {
             var pet = Pet(
                 id: Uuid().v4(),
@@ -212,13 +213,19 @@ class _AddPetPageState extends State<AddPetPage> {
                 status: Status.found,
                 dateOfBirth:
                     DateFormat('yyyy-MM-dd').parse(_dateController.text),
-                owner: CurrentUser.currentUser);
+                userId: context.read<AuthService>().user!.uid);
+            try {
+              await context.read<PetRepository>().addPet(pet);
+            } catch (e) {
+              print('Error adding pet: $e');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(e.toString()),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
 
-            var petProvider = Provider.of<PetRepository>(
-              context,
-              listen: false,
-            );
-            petProvider.addPet(pet);
             Navigator.pop(context);
           }
         },

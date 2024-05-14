@@ -5,8 +5,7 @@ class DBFirestore {
   static final DBFirestore _instance = DBFirestore._();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static FirebaseFirestore get(){
+  static FirebaseFirestore get() {
     return DBFirestore._instance._firestore;
   }
-
 }

@@ -3,7 +3,6 @@ import 'package:projeto/models/pet.dart';
 import 'package:projeto/models/sighted.dart';
 import 'package:projeto/pages/sighted_details_page.dart';
 import 'package:projeto/repositories/sighted_repository.dart';
-import 'package:projeto/repositories/user_repository.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -22,37 +21,16 @@ class _SightedPageState extends State<SightedPage> {
 
   @override
   void initState() {
-    _filteredSightings = Provider.of<SightedRepository>(
-      context,
-      listen: false,
-    ).allSightings;
-    _searchController.addListener(_searchSightings);
     super.initState();
+    _searchController.addListener(_searchSightings);
   }
 
-  _searchSightings() {
-    final String searchText = _searchController.text.toLowerCase();
+  void _searchSightings() {
     setState(() {
-      _filteredSightings = Provider.of<SightedRepository>(
-        context,
-        listen: false,
-      ).allSightings.where((sighting) {
-        switch (_selectedSearchItem) {
-          case 'Cor':
-            return sighting.color.toLowerCase().contains(searchText);
-          case 'Raça':
-            return sighting.breed?.toLowerCase().contains(searchText) ?? false;
-          case 'Descrição':
-            return sighting.description?.toLowerCase().contains(searchText) ??
-                false;
-          case 'Endereço':
-            return sighting.address.toLowerCase().contains(searchText);
-          case 'Cidade':
-            return sighting.city.toLowerCase().contains(searchText);
-          default:
-            return false;
-        }
-      }).toList();
+      _filteredSightings = context.read<SightedRepository>().filteredSightings(
+            _searchController.text,
+            _selectedSearchItem,
+          );
     });
   }
 
@@ -65,7 +43,6 @@ class _SightedPageState extends State<SightedPage> {
             context,
             listen: false,
           ).addSighting(sighting);
-          _searchSightings();
         },
       ),
     );
@@ -73,6 +50,10 @@ class _SightedPageState extends State<SightedPage> {
 
   @override
   Widget build(BuildContext context) {
+    _filteredSightings = context.watch<SightedRepository>().filteredSightings(
+          _searchController.text,
+          _selectedSearchItem,
+        );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[100],
@@ -112,8 +93,8 @@ class _SightedPageState extends State<SightedPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SightingDetailsPage(
-                              sighting: sighting, onSearch: _searchSightings),
+                          builder: (context) =>
+                              SightingDetailsPage(sighting: sighting),
                         ),
                       );
                     },
@@ -153,7 +134,6 @@ class _SightedPageState extends State<SightedPage> {
             onChanged: (value) {
               setState(() {
                 _selectedSearchItem = value!;
-                _searchSightings();
               });
               Navigator.pop(context);
             },
@@ -252,14 +232,15 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
         ElevatedButton(
           onPressed: () {
             Sighted newSighting = Sighted(
-                id: const Uuid().v4(),
-                color: _color,
-                type: _type,
-                breed: _breed,
-                description: _description,
-                address: _address,
-                city: _city,
-                userId: context.read<AuthService>().user!.uid,);
+              id: const Uuid().v4(),
+              color: _color,
+              type: _type,
+              breed: _breed,
+              description: _description,
+              address: _address,
+              city: _city,
+              userId: context.read<AuthService>().user!.uid,
+            );
             widget.onSightingAdded(newSighting);
             Navigator.pop(context);
           },

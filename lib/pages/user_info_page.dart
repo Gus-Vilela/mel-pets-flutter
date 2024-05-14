@@ -33,13 +33,18 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (CurrentUser.currentUser.image != null)
-                              CircleAvatar(
-                                radius: 50,
-                                backgroundImage: AssetImage(
-                                  CurrentUser.currentUser.image as String,
-                                ),
-                              ),
+                            userRepository.currentUser!.image != null
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: AssetImage(
+                                      userRepository.currentUser!.image
+                                          as String,
+                                    ),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 50,
+                                    child: Icon(Icons.person),
+                                  ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Text(

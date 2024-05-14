@@ -258,7 +258,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          user.phone as String,
+                          user.phone ?? 'Não informado',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -272,7 +272,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          user.address as String,
+                          user.address ?? 'Não informado',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -287,7 +287,7 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          user.city as String,
+                          user.city ?? 'Não informado',
                           style: const TextStyle(
                             fontSize: 16,
                           ),

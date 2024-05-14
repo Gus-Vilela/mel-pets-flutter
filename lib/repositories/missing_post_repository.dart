@@ -7,7 +7,6 @@ import 'package:projeto/models/missing_post.dart';
 class MissingPostRepository extends ChangeNotifier {
   List<MissingPost> missingPosts = [];
   late FirebaseFirestore db;
-  // final UserRepository userRepository = UserRepository();
 
   UnmodifiableListView<MissingPost> get allMissingPosts =>
       UnmodifiableListView(missingPosts);
@@ -24,44 +23,6 @@ class MissingPostRepository extends ChangeNotifier {
   _startFirestore() async {
     db = DBFirestore.get();
   }
-
-  // MissingPostRepository() {
-  //   missingPosts.addAll([
-  //     MissingPost(
-  //         id: '1000',
-  //         location: 'Proximo ao centro',
-  //         description: 'Cachorro perdido',
-  //         date: DateTime(2024, 1, 12),
-  //         pet: Pet(
-  //           id: '1001',
-  //           name: 'Rex',
-  //           type: PetType.cachorro,
-  //           breed: 'Golden Retriever',
-  //           dateOfBirth: DateTime(2018, 5, 20),
-  //           color: 'Dourada',
-  //           image: 'images/pets/Golden.jpg',
-  //           status: Status.lost,
-  //         ),
-  //         user: CurrentUser.currentUser),
-  //     MissingPost(
-  //       id: '1001',
-  //       location: 'Proximo ao Shopping',
-  //       description: 'Gato perdido',
-  //       date: DateTime(2023, 10, 23),
-  //       pet: Pet(
-  //         id: '1001',
-  //         name: 'Rex',
-  //         type: PetType.cachorro,
-  //         breed: 'Golden Retriever',
-  //         dateOfBirth: DateTime(2018, 5, 20),
-  //         color: 'Dourada',
-  //         image: 'images/pets/Golden.jpg',
-  //         status: Status.lost,
-  //       ),
-  //       user: CurrentUser.currentUser,
-  //     ),
-  //   ]);
-  // }
 
   _readAllMissingPosts() async {
     try {

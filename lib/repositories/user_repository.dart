@@ -29,48 +29,9 @@ class UserRepository extends ChangeNotifier {
     db = DBFirestore.get();
   }
 
-  // UserRepository() {
-  //   _users.addAll([
-  //     User(
-  //         id: '1000',
-  //         name: 'Gustavo',
-  //         email: 'gustavo@gmail.com',
-  //         phone: '999999999',
-  //         address: 'Rua 1',
-  //         city: 'Ponta Grossa',
-  //         image: 'images/shrek.jpg'),
-  //     User(
-  //       id: '1001',
-  //       name: 'João',
-  //       email: 'jao@gmail.com',
-  //       phone: '999999999',
-  //       address: 'Rua 2',
-  //       city: 'Ponta Grossa',
-  //     ),
-  //   ]);
-  // }
-
   List<User> getUsers() {
     return _users;
   }
-
-  // _readUsers() async {
-  //   if (authService.user != null) {
-  //     final querySnapshot =
-  //         await db.collection('users/${authService.user.uid}').get();
-  //     for (final doc in querySnapshot.docs) {
-  //       final data = doc.data();
-  //       final user = User.fromMap(data);
-  //       _users.add(user);
-  //     }
-  //     notifyListeners();
-  //   }
-  // }
-
-  // addUser(User user) {
-  //   _users.add(user);
-  //   notifyListeners();
-  // }
 
   _readCurrentUser() async {
     if (authService.user != null && _currentUser == null) {
@@ -123,15 +84,4 @@ class UserRepository extends ChangeNotifier {
       notifyListeners();
     }
   }
-}
-
-class CurrentUser extends ChangeNotifier {
-  static User currentUser = User(
-      id: '1000',
-      name: 'Gustavo',
-      email: 'gustavo@gmail.com',
-      phone: '999999999',
-      address: 'Rua 1',
-      city: 'Ponta Grossa',
-      image: 'images/shrek.jpg');
 }

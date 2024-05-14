@@ -3,6 +3,7 @@ import 'package:projeto/pages/missing_page.dart';
 import 'package:projeto/pages/sighted_page.dart';
 import 'package:projeto/pages/user_info_page.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
   late PageController pageController;
+  late UserRepository userRepository;
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    userRepository = context.watch<UserRepository>();
     return Scaffold(
         body: PageView(
           controller: pageController,
@@ -51,17 +54,17 @@ class _HomePageState extends State<HomePage> {
               label: 'Avistados',
             ),
             BottomNavigationBarItem(
-              icon: CurrentUser.currentUser.image != null
+              icon: userRepository.currentUser?.image != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.asset(
-                        CurrentUser.currentUser.image as String,
+                        userRepository.currentUser!.image as String,
                         width: 26,
                         height: 26,
                       ))
                   : const SizedBox(
-                      width: 26, 
-                      height: 26, 
+                      width: 26,
+                      height: 26,
                       child: Icon(Icons.person, size: 25),
                     ),
               label: 'Perfil',

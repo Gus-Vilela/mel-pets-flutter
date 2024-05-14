@@ -24,9 +24,9 @@ class _MultiStepFormState extends State<MultiStepForm> {
   late MissingPostRepository postRepository;
   late PetRepository petRepository;
 
-  onNextStep(
+  Future<void> onNextStep(
     Map<String, dynamic> data,
-  ) {
+  ) async {
     _formData.addAll(data);
     if (_currentStep < 1) {
       _controller.nextPage(
@@ -44,7 +44,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
       );
     }
     if (widget.initialData != null) {
-      postRepository.updateMissingPost(
+      await postRepository.updateMissingPost(
         MissingPost(
           id: widget.initialData!.id,
           location: _formData['location'] as String,
@@ -58,7 +58,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
       return;
     }
 
-    postRepository.addMissingPost(
+    await postRepository.addMissingPost(
       MissingPost(
         id: Uuid().v4(),
         location: _formData['location'] as String,

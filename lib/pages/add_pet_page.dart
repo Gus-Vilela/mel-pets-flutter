@@ -224,12 +224,15 @@ class _AddPetPageState extends State<AddPetPage> {
                 ),
               );
             }
-
             Navigator.pop(context);
           }
         },
         heroTag: 'salvar',
-        child: const Icon(Icons.save),
+        child: context.watch<PetRepository>().isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : const Icon(Icons.save),
       ),
     );
   }

@@ -5,11 +5,12 @@ import 'package:projeto/databases/db_firestore.dart';
 import 'package:projeto/models/missing_post.dart';
 
 class MissingPostRepository extends ChangeNotifier {
-  List<MissingPost> missingPosts = [];
+  final List<MissingPost> _missingPosts = [];
   late FirebaseFirestore db;
+  bool isLoading = false;
 
   UnmodifiableListView<MissingPost> get allMissingPosts =>
-      UnmodifiableListView(missingPosts);
+      UnmodifiableListView(_missingPosts);
 
   MissingPostRepository() {
     _startRepository();
@@ -26,60 +27,72 @@ class MissingPostRepository extends ChangeNotifier {
 
   _readAllMissingPosts() async {
     try {
+      isLoading = true;
+      notifyListeners();
       final querySnapshot = await db.collection('missing_posts').get();
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
         final missingPost = MissingPost.fromMap(data);
-        missingPosts.add(missingPost);
+        _missingPosts.add(missingPost);
       }
-      notifyListeners();
     } catch (e) {
       print('Erro ao ler os dados: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
-  addMissingPost(MissingPost missingPost) {
+  addMissingPost(MissingPost missingPost) async {
     try {
-      db
+      isLoading = true;
+      notifyListeners();
+      await db
           .collection('missing_posts')
           .doc(missingPost.id)
           .set(missingPost.toMap());
-      missingPosts.add(missingPost);
-      notifyListeners();
+      _missingPosts.add(missingPost);
     } catch (e) {
       print('Erro ao adicionar post: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
-  removeMissingPost(MissingPost missingPost) {
+  removeMissingPost(MissingPost missingPost) async {
     try {
-      db.collection('missing_posts').doc(missingPost.id).delete();
-      missingPosts.remove(missingPost);
+      isLoading = true;
       notifyListeners();
+      await db.collection('missing_posts').doc(missingPost.id).delete();
+      _missingPosts.remove(missingPost);
     } catch (e) {
       print('Erro ao remover post: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
   MissingPost? getMissingPostById(String id) {
     try {
-      return missingPosts.firstWhere((element) => element.id == id);
+      return _missingPosts.firstWhere((element) => element.id == id);
     } catch (e) {
       return null;
     }
   }
 
-  updateMissingPost(MissingPost missingPost) {
+  updateMissingPost(MissingPost missingPost) async {
     try {
-      var index = missingPosts.indexWhere((p) => p.id == missingPost.id);
-      missingPosts[index] = missingPost;
-      db
+      isLoading = true;
+      notifyListeners();
+      var index = _missingPosts.indexWhere((p) => p.id == missingPost.id);
+      _missingPosts[index] = missingPost;
+      await db
           .collection('missing_posts')
           .doc(missingPost.id)
           .update(missingPost.toMap());
-      notifyListeners();
     } catch (e) {
       print('Erro ao atualizar post: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 }

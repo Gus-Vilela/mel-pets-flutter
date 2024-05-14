@@ -327,16 +327,23 @@ class _MissingDetailsPageState extends State<MissingDetailsPage> {
                   width: 45,
                   height: 45,
                   child: FloatingActionButton(
-                    onPressed: () {
+                    onPressed: () async {
                       petRepository.petFound(
                         pet,
                       );
-                      missingPostRepository.removeMissingPost(missingPost);
+                      await missingPostRepository
+                          .removeMissingPost(missingPost);
                       Navigator.pop(context);
                     },
                     heroTag: 'deletar',
                     backgroundColor: Colors.red[400],
-                    child: const Icon(Icons.delete, color: Colors.white),
+                    child: missingPostRepository.isLoading
+                        ? const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.delete, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 15),

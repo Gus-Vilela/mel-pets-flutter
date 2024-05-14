@@ -108,20 +108,23 @@ class SightingDetailsPage extends StatelessWidget {
 
       floatingActionButton: isCurrentUserCreator
           ? FloatingActionButton(
-              onPressed: () {
-                _deleteSighting(context);
+              onPressed: () async {
+                await _deleteSighting(context);
               },
               backgroundColor: Colors.red[400],
-              child: const Icon(Icons.delete),
+              child: context.watch<SightedRepository>().isLoading
+                  ? const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                  : const Icon(Icons.delete),
             )
           : null,
     );
   }
 
-      
-  void _deleteSighting(BuildContext context) {
-    var sightedRepository = context.read<SightedRepository>();
-    sightedRepository.deleteSighting(sighting.id);
+  _deleteSighting(BuildContext context) async {
+    SightedRepository sightedRepository = context.read<SightedRepository>();
+    await sightedRepository.deleteSighting(sighting.id);
     Navigator.pop(context);
   }
 }

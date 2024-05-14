@@ -8,12 +8,14 @@ import 'package:projeto/services/auth.service.dart';
 
 class UserRepository extends ChangeNotifier {
   final List<User> _users = [];
-  User? _currentUser;
   late FirebaseFirestore db;
   late AuthService authService;
+  bool isLoading = false;
 
   UnmodifiableListView<User> get users => UnmodifiableListView(_users);
-  User? get currentUser => _currentUser;
+  User? get currentUser => users.isNotEmpty
+      ? users.firstWhere((u) => u.id == authService.user!.uid)
+      : null;
 
   UserRepository({required this.authService}) {
     _startRepository();
@@ -21,8 +23,7 @@ class UserRepository extends ChangeNotifier {
 
   _startRepository() async {
     await _startFirestore();
-    await _readCurrentUser();
-    await _readAllUsers();
+    await readAllUsers();
   }
 
   _startFirestore() async {
@@ -33,34 +34,21 @@ class UserRepository extends ChangeNotifier {
     return _users;
   }
 
-  _readCurrentUser() async {
-    if (authService.user != null && _currentUser == null) {
-      try {
-        final doc =
-            await db.collection('users').doc(authService.user!.uid).get();
-        if (doc.exists) {
-          final data = doc.data();
-          _currentUser = User.fromMap(data!);
-          notifyListeners();
-        }
-      } catch (e) {
-        print('Erro ao ler usuário atual: $e');
-      }
-    }
-  }
-
-  _readAllUsers() async {
+  readAllUsers() async {
     try {
+      isLoading = true;
+      notifyListeners();
       final querySnapshot = await db.collection('users').get();
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
         final user = User.fromMap(data);
         _users.add(user);
       }
-      notifyListeners();
     } catch (e) {
       print('Erro ao ler usuários: $e');
     }
+    isLoading = false;
+    notifyListeners();
   }
 
   addUser(User user) async {
@@ -77,11 +65,11 @@ class UserRepository extends ChangeNotifier {
     return _users.firstWhere((u) => u.id == id);
   }
 
-  updateUser(User user) {
+  updateUser(User user) async {
     try {
       var index = _users.indexWhere((u) => u.id == user.id);
       _users[index] = user;
-      db.collection('users').doc(user.id).update(user.toMap());
+      await db.collection('users').doc(user.id).update(user.toMap());
     } catch (e) {
       print('Erro ao atualizar usuário: $e');
     }

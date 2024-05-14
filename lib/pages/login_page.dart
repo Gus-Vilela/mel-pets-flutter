@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:projeto/pages/register_page.dart';
 import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';

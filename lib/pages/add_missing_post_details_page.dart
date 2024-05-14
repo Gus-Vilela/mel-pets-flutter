@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto/models/missing_post.dart';
 import 'package:projeto/models/pet.dart';
+import 'package:projeto/repositories/missing_post_repository.dart';
+import 'package:provider/provider.dart';
 
 class AddMissingPostDetailsPage extends StatefulWidget {
-  final Function(Map<String, dynamic>) onNextStep;
+  final Future<void> Function(Map<String, dynamic>) onNextStep;
   final Pet pet;
   final MissingPost? initialData;
-  const AddMissingPostDetailsPage(
-      {super.key,
-      required this.onNextStep,
-      required this.pet,
-      this.initialData});
+  const AddMissingPostDetailsPage({
+    super.key,
+    required this.onNextStep,
+    required this.pet,
+    this.initialData,
+  });
 
   @override
   State<AddMissingPostDetailsPage> createState() =>
@@ -51,9 +54,9 @@ class _AddMissingPostDetailsPageState extends State<AddMissingPostDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    onSubmit() {
+    onSubmit() async {
       if (_formKey.currentState!.validate()) {
-        widget.onNextStep({
+        await widget.onNextStep({
           'description': _value1.text,
           'location': _value2.text,
           'date': _dateController.text,
@@ -159,7 +162,11 @@ class _AddMissingPostDetailsPageState extends State<AddMissingPostDetailsPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: onSubmit,
-          child: const Icon(Icons.arrow_forward),
+          child: context.watch<MissingPostRepository>().isLoading
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+              : const Icon(Icons.arrow_forward),
         ));
   }
 }

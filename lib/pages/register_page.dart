@@ -22,8 +22,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    userRepository = context.watch<UserRepository>();
-
     register() async {
       if (formKey.currentState!.validate()) {
         setState(() {
@@ -34,13 +32,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 email.text,
                 password.text,
               );
-          var user = User(
+          User user = User(
             id: context.read<AuthService>().user!.uid,
             email: email.text,
             name: name.text,
           );
-
+          userRepository = context.read<UserRepository>();
           await userRepository.addUser(user);
+
           Navigator.pop(context);
         } on AuthException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(

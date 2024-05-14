@@ -9,7 +9,6 @@
 
 ## Funcionalidades faltantes
 - Logout;
-- Edição;
 - Configurações;
 - Associação de Anúncios com avistamentos;
 

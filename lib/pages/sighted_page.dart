@@ -4,6 +4,7 @@ import 'package:projeto/models/sighted.dart';
 import 'package:projeto/pages/sighted_details_page.dart';
 import 'package:projeto/repositories/sighted_repository.dart';
 import 'package:projeto/repositories/user_repository.dart';
+import 'package:projeto/services/auth.service.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -258,7 +259,7 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
                 description: _description,
                 address: _address,
                 city: _city,
-                user: CurrentUser.currentUser);
+                userId: context.read<AuthService>().user!.uid,);
             widget.onSightingAdded(newSighting);
             Navigator.pop(context);
           },

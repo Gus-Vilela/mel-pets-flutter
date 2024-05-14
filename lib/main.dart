@@ -26,7 +26,7 @@ void main() async {
         create: (context) => MissingPostRepository(),
       ),
       ChangeNotifierProvider(
-        create: (context) => SightedRepository(),
+        create: (context) => SightedRepository(authService: context.read<AuthService>()),
       ),
       ChangeNotifierProvider(
           create: (context) =>

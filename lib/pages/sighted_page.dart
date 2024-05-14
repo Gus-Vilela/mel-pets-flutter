@@ -167,6 +167,7 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
   late String _description;
   late String _address;
   late String _city;
+  late DateTime _dateOfSight;
 
   @override
   void initState() {
@@ -183,7 +184,9 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              decoration: const InputDecoration(labelText: 'Cor'),
+              decoration: InputDecoration(labelText: 'Cor', focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]!),
+                  ),),
               onChanged: (value) => _color = value,
             ),
             DropdownButtonFormField<PetType>(
@@ -207,22 +210,35 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
                   child: Text('Outro'),
                 ),
               ],
-              decoration: const InputDecoration(labelText: 'Espécie'),
+              decoration: InputDecoration(labelText: 'Espécie', focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]!),
+                  ),),
             ),
             TextField(
-              decoration: const InputDecoration(labelText: 'Raça'),
+              decoration: InputDecoration(labelText: 'Raça',
+               focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]!),
+                  ),
+                  ),
               onChanged: (value) => _breed = value,
+             
             ),
             TextField(
-              decoration: const InputDecoration(labelText: 'Descrição'),
+              decoration: InputDecoration(labelText: 'Descrição', focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]!),
+                  ),),
               onChanged: (value) => _description = value,
             ),
             TextField(
-              decoration: const InputDecoration(labelText: 'Endereço'),
+              decoration:  InputDecoration(labelText: 'Endereço', focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]!),
+                  ),),
               onChanged: (value) => _address = value,
             ),
             TextField(
-              decoration: const InputDecoration(labelText: 'Cidade'),
+              decoration:  InputDecoration(labelText: 'Cidade', focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]!),
+                  ),),
               onChanged: (value) => _city = value,
             ),
           ],
@@ -233,6 +249,7 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
           onPressed: () {
             Sighted newSighting = Sighted(
               id: const Uuid().v4(),
+              dateOfSight: _dateOfSight,
               color: _color,
               type: _type,
               breed: _breed,
@@ -244,7 +261,11 @@ class _AddSightingDialogState extends State<_AddSightingDialog> {
             widget.onSightingAdded(newSighting);
             Navigator.pop(context);
           },
+          style: ButtonStyle(
+            foregroundColor:MaterialStateProperty.all<Color?>(Colors.red[300]),
+          ),
           child: const Text('Adicionar'),
+          
         ),
       ],
     );

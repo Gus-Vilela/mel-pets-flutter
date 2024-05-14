@@ -2,7 +2,7 @@ import 'package:projeto/models/pet.dart';
 
 class Sighted {
   String id;
-  //DateTime? dateOfSight;
+  DateTime? dateOfSight;
   String color;
   PetType type;
   String? breed;
@@ -13,7 +13,7 @@ class Sighted {
 
   Sighted({
     required this.id,
-    //required this.dateOfSight,
+    required this.dateOfSight,
     required this.color,
     required this.type,
     required this.address,
@@ -26,7 +26,7 @@ class Sighted {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      //'dateOfSight': dateOfSight?.millisecondsSinceEpoch,
+      'dateOfSight': dateOfSight?.millisecondsSinceEpoch,
       'color': color,
       'type': type.index,
       'address': address,
@@ -40,9 +40,9 @@ class Sighted {
   factory Sighted.fromMap(Map<String, dynamic> map) {
     return Sighted(
       id: map['id'] as String,
-      //dateOfSight: map['dateOfSight'] == null
-      //  ? null
-      //: DateTime.fromMillisecondsSinceEpoch(map['dateOfSight'] as int),
+      dateOfSight: map['dateOfSight'] == null
+        ? null
+      : DateTime.fromMillisecondsSinceEpoch(map['dateOfSight'] as int),
       color: map['color'] as String,
       type: PetType.values[map['type'] as int],
       address: map['address'] as String,

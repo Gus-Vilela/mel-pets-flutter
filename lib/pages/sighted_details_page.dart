@@ -26,9 +26,19 @@ class SightingDetailsPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[100],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      body: Container(
+         padding: const EdgeInsets.symmetric(
+        vertical: 10.0, horizontal: 20.0),
+         margin: const EdgeInsets.symmetric(
+        vertical: 10.0, horizontal: 30.0),
+        decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+            color: Colors.red[300] as Color,
+            width: 2,
+              ),
+            ),
+           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -84,6 +94,7 @@ class SightingDetailsPage extends StatelessWidget {
           ],
         ),
       ),
+
       floatingActionButton: isCurrentUserCreator
           ? FloatingActionButton(
               onPressed: () {
@@ -96,6 +107,7 @@ class SightingDetailsPage extends StatelessWidget {
     );
   }
 
+      
   void _deleteSighting(BuildContext context) {
     var sightedRepository = context.read<SightedRepository>();
     sightedRepository.deleteSighting(sighting.id);
